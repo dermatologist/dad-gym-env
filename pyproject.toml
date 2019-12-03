@@ -4,6 +4,11 @@ version = "0.1.0"
 description = ""
 authors = ["beapen <github@gulfdoctor.net>"]
 
+readme = 'README.md'  # Markdown files are supported
+
+repository = "https://github.com/dermatologist/dad-gym-env"
+homepage = "https://github.com/dermatologist/dad-gym-env"
+
 [tool.poetry.dependencies]
 python = "^3.7"
 opencv-python = "3.4.4.19"
