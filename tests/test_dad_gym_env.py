@@ -1,21 +1,37 @@
 from dad_gym_env import __version__
 from dad_gym_env.envs import dad_env, headers
+import pytest
+
+"""
+        http://www.health.gov.on.ca/en/pro/programs/ecfa/docs/qbp_gi.pdf
+        2NM - Inspection large intestine
+        2NK - Inspection small intestine
+        2NA - Inspection esophagus
+        2NF - Inspection stomach
+        3OZ - Imaging intervention 
+
+        "/home/beapen/project/beapen/dad-vec-sample.csv",
+"""
+@pytest.fixture
+def new_env():
+    dad_env_ = dad_env.DadEnv(
+        "/home/beapen/project/beapen/dad-vec-sample.csv", 
+        treatments=['2NA', '2NM', '2NK', '2NF', '3OZ']
+        )
+    return dad_env_
 
 def test_version():
     assert __version__ == '0.1.0'
+    
 
-def test_dad_env():
-    dad_env_1 = dad_env.DadEnv(
-        "/home/beapen/project/beapen/dad-vec-sample.csv", #"/home/beapen/project/beapen/dad-vec-sample.csv",
-        # http://www.health.gov.on.ca/en/pro/programs/ecfa/docs/qbp_gi.pdf
-        # 2NM - Inspection large intestine
-        # 2NK - Inspection small intestine
-        # 2NA - Inspection esophagus
-        # 2NF - Inspection stomach
-        treatments=['2NM', '2NA', '2NA', '2NF']
-        )
-    #print(dad_env_1.metadata)
-    #assert False == True
+def test_dad_env(new_env):
+    assert {'render.modes': ['human']} == new_env.metadata
+
+def test_get_actions(new_env):
+    assert new_env._get_actions() # List is not empty
+
+def test_get_states(new_env):
+    assert new_env._get_states().any()
 
 def test_get_index():
     print('AGRP_F_D: ', headers.HEADERS.index('AGRP_F_D')) # 2 / 2103
