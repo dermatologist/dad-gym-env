@@ -21,17 +21,15 @@ class DadEnv(gym.Env):
 
         self.dadvec_file = dadvec_file
         self.treatments = treatments
-
-        self.NUMBER_FACTORS = 2103
-
-        (rows,cols) = self.load_file()
+        (self._rows, self._cols) = self.load_file()
         self.NUMBER_FACTORS = len(DISEASES)
         self._get_actions()
         self.action_space = spaces.Discrete(2 if len(self._actions) == 1 else len(self._actions))
         # Observation space is a vector of length number of factors
+        self._get_states()
         self.observation_space = spaces.Box(
                                     low=0, high=1, 
-                                    shape=(1,self.NUMBER_FACTORS), 
+                                    shape=(len(self._states),self.NUMBER_FACTORS), 
                                             dtype=np.uint8)
     
     
