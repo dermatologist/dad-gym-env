@@ -6,6 +6,7 @@ import random
 
 # 3rd party modules
 import numpy as np
+import pandas as pd
 from numpy import genfromtxt
 import gym
 from gym import error, spaces, utils
@@ -31,10 +32,22 @@ class DadEnv(gym.Env):
                                     low=0, high=1, 
                                     shape=(1,self.NUMBER_FACTORS), 
                                             dtype=np.uint8)
-        dad_file = genfromtxt(dadvec_file, delimiter=',')
-        print(dad_file.shape) # (100, 2103)
+
+        self.df = pd.read_csv(dadvec_file, sep=',', error_bad_lines=False, index_col=False, dtype='unicode')
+        self.received_treatments = pd.DataFrame(columns=self.df.columns)
+        #dad_file = genfromtxt(dadvec_file, delimiter=',')
+        # print(self.df.shape) # (100, 2103)
         # https://machinelearningmastery.com/index-slice-reshape-numpy-arrays-machine-learning-python/
 
+        # FIXME
+        for treatment in treatments:
+            _df = self.df[self.df[treatment] == '1']
+            isempty = self.received_treatments.empty
+            if isempty:
+                self.received_treatments = _df
+            else:
+                self.received_treatments.append(_df, ignore_index=True)
+        print("received treatments shape: ", self.received_treatments.shape)
     def load_file(self, dadvec_file):
         pass
     
