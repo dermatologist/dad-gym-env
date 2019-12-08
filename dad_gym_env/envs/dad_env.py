@@ -25,12 +25,16 @@ def unique(list1):
 class DadEnv(gym.Env):
     metadata = {'render.modes': ['human']}
 
-    def __init__(self, dadvec_file, treatments=[]):
+    def __init__(self):
+        dadvec_file = "/home/beapen/projects/def-archer/beapen/dad-vec-sample.csv"
+        treatments = ['2NA', '2NM', '2NK', '2NF', '3OZ']
         super(DadEnv, self).__init__()
         treatment_no = len(treatments)
         self.full_record = None
         self.df = None
         self.received_treatments = None
+        self.observation = None
+        self.reward = 5
         self.dadvec_file = dadvec_file
         self.treatments = treatments
         (self._rows, self._cols) = self.load_file()

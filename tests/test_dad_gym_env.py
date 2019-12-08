@@ -1,7 +1,7 @@
 from dad_gym_env import __version__
 from dad_gym_env.envs import dad_env, headers
 import pytest
-
+import gym
 """
         http://www.health.gov.on.ca/en/pro/programs/ecfa/docs/qbp_gi.pdf
         2NM - Inspection large intestine
@@ -14,10 +14,7 @@ import pytest
 """
 @pytest.fixture
 def new_env():
-    dad_env_ = dad_env.DadEnv(
-        "/home/beapen/projects/def-archer/beapen/dad-vec-sample.csv", 
-        treatments=['2NA', '2NM', '2NK', '2NF', '3OZ']
-        )
+    dad_env_ = dad_env.DadEnv()
     return dad_env_
 
 def test_version():
@@ -47,6 +44,14 @@ def test_step(new_env):
     print(new_env.step(new_env.get_random_action()))
     print(new_env.step(new_env.get_random_action()))
     print(new_env.step(new_env.get_random_action()))
+
+def test_agent():
+    env = gym.make('Dad-v0')
+    env.reset()
+    for _ in range(10):
+        env.render()
+        env.step(env.get_random_action())  # take a random action
+    env.close()
 # def test_get_index():
 #     print('AGRP_F_D: ', headers.HEADERS.index('AGRP_F_D')) # 2 / 2103
 #     print('GENDER: ', headers.HEADERS.index('GENDER')) # 3 / 2103
