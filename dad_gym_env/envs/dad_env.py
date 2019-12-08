@@ -61,6 +61,7 @@ class DadEnv(gym.Env):
                 _action = _action + row[treatment]
             _actions.append(_action)
             _action = ''
+        self.received_treatments['Action'] = _actions
         self._actions = self.unique(_actions)
         return(self._actions)
 
@@ -91,6 +92,8 @@ class DadEnv(gym.Env):
         self.info = {"action": action}
 
         # Create a blank table with the column headers
+        # Candidates have received all treatments in an action
+        # self.received_treatments have received one or more treatments in an action
         self.candidates = pd.DataFrame(columns=self.df.columns)
 
         for i in range( len(action) ):
@@ -98,29 +101,31 @@ class DadEnv(gym.Env):
                 isempty = self.candidates.empty
                 # if empty add the first condition
                 if isempty:
-                    _df = self.df[self.df[self.treatments[i]] == '1']
+                    _df = self.received_treatments[self.received_treatments[self.treatments[i]] == '1']
                     self.candidates = _df
                 else:
                     # else filter based on condition
                     self.candidates = self.candidates[self.candidates[self.treatments[i]] == '1']
         tlos = 0
         ct = 0
-        for index, candidate in self.candidates.iterrows():
-            tlos = tlos + int(candidate['TLOS_CAT'])
+        for index, row in self.received_treatments.iterrows():
+            tlos = tlos + int(row['TLOS_CAT'])
             ct = ct + 1
         average_tlos = tlos / ct
         self.reward = int(10 - average_tlos)
 
-        _action = ''
+        print("Received: ", self.received_treatments.shape)
+        print("Candidates: ", self.candidates.shape)
+
         if self.full_record is not None:
-            for treatment in self.treatments:
-                _action = _action + self.full_record[treatment].iloc[0]
-            if action == _action:
-                self.reward = 10 - (int(self.full_record['TLOS_CAT'].iloc[0]))
+            _full_record = self.full_record[self.full_record['Action'] == action]
+            isempty = _full_record.empty
+            if not isempty:
+                self.reward = 10 - (int(_full_record['TLOS_CAT'].iloc[0]))
         # 'Unnamed: 0' is the index TODO: This has to be renamed
         # print(self.candidates.sample(n=1)['Unnamed: 0'])
         self.full_record = self.candidates.sample(n=1)
-        self.observation = self.candidates.sample(n=1).filter(DISEASES).to_numpy()     
+        self.observation = self.full_record.filter(DISEASES).to_numpy()     
         return self.observation, self.reward, self.done, self.info
   
     def reset(self):
