@@ -61,6 +61,8 @@ class DadEnv(gym.Env):
                 _action = _action + row[treatment]
             _actions.append(_action)
             _action = ''
+        # This is need to remove the copy warning in adding new column
+        pd.options.mode.chained_assignment = None  # default='warn'
         self.received_treatments['Action'] = _actions
         self._actions = self.unique(_actions)
         return(self._actions)
@@ -122,8 +124,6 @@ class DadEnv(gym.Env):
             isempty = _full_record.empty
             if not isempty:
                 self.reward = 10 - (int(_full_record['TLOS_CAT'].iloc[0]))
-        # 'Unnamed: 0' is the index TODO: This has to be renamed
-        # print(self.candidates.sample(n=1)['Unnamed: 0'])
         self.full_record = self.candidates.sample(n=1)
         self.observation = self.full_record.filter(DISEASES).to_numpy()     
         return self.observation, self.reward, self.done, self.info

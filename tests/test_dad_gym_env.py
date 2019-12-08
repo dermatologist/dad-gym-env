@@ -15,7 +15,7 @@ import pytest
 @pytest.fixture
 def new_env():
     dad_env_ = dad_env.DadEnv(
-        "/home/beapen/projects/def-archer/beapen/dad-vector.csv", 
+        "/home/beapen/projects/def-archer/beapen/dad-vec-sample.csv", 
         treatments=['2NA', '2NM', '2NK', '2NF', '3OZ']
         )
     return dad_env_
