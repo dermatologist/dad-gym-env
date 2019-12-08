@@ -29,7 +29,7 @@ class DadEnv(gym.Env):
         self._get_states()
         self.observation_space = spaces.Box(
                                     low=0, high=1, 
-                                    shape=(len(self._states),self.NUMBER_FACTORS), 
+                                    shape=(1,self.NUMBER_FACTORS), 
                                             dtype=np.uint8)
     
     
@@ -40,6 +40,7 @@ class DadEnv(gym.Env):
     """    
     def load_file(self):
         self.df = pd.read_csv(self.dadvec_file, sep=',', error_bad_lines=False, index_col=False, dtype='unicode')
+        # Create a blank table with the column headers
         self.received_treatments = pd.DataFrame(columns=self.df.columns)
         # print(self.df.shape) # (100, 2103)
         for treatment in self.treatments:
@@ -76,7 +77,32 @@ class DadEnv(gym.Env):
         return unique_list
 
     def step(self, action):
-        pass
+        self.done = True
+        self.info = {"action": action}
+
+        # Create a blank table with the column headers
+        self.candidates = pd.DataFrame(columns=self.df.columns)
+
+        for i in range( len(action) ):
+            print(action[i])
+            if i == '1':
+                isempty = self.candidates.empty
+                # if empty add the first condition
+                if isempty:
+                    _df = self.df[self.df[self.treatments[i]] == '1']
+                    self.candidates = _df
+                else:
+                    # else filter based on condition
+                    self.candidates = self.candidates[self.candidates[self.treatments[i]] == '1']
+        tlos = 0
+        ct = 0
+        for candidate in self.candidates:
+            tlos = tlos + int(candidate['TLOS_CAT'])
+            ct = ct + 1
+        average_tlos = tlos / ct
+        self.reward = int(10 - average_tlos)
+        self.observation = self.candidate.sample(n=1)     
+        return self.observation, self.reward, self.done, self.info
   
     def reset(self):
         pass
