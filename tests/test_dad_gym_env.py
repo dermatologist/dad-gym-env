@@ -31,13 +31,15 @@ def test_get_actions(new_env):
     assert new_env._get_actions() # List is not empty
 
 def test_get_random_action(new_env):
-    print("\n", new_env._get_actions(), "\n")
-    print(new_env.get_random_action())
+    # print("\n", "Random Action", "\n")
+    # print(new_env.get_random_action())
+    assert len(new_env.get_random_action())
 
 def test_get_random_state(new_env):
-    print("\n", new_env._get_states(), "\n")
-    print(new_env.get_random_state())    
-
+    # print("\n", "Random state", "\n")
+    # print(new_env.get_random_state())    
+    assert new_env.get_random_state().any()
+    
 def test_get_states(new_env):
     assert new_env._get_states().any()
 
