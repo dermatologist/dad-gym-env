@@ -12,13 +12,25 @@ import gym
 from gym import error, spaces, utils
 from gym.utils import seeding
 from .headers import DISEASES
+
+
+def unique(list1):
+    # insert the list to the set
+    list_set = set(list1)
+    # convert the set to the list
+    unique_list = (list(list_set))
+    return unique_list
+
+
 class DadEnv(gym.Env):
     metadata = {'render.modes': ['human']}
-    
+
     def __init__(self, dadvec_file, treatments=[]):
         super(DadEnv, self).__init__()
         treatment_no = len(treatments)
         self.full_record = None
+        self.df = None
+        self.received_treatments = None
         self.dadvec_file = dadvec_file
         self.treatments = treatments
         (self._rows, self._cols) = self.load_file()
@@ -28,16 +40,15 @@ class DadEnv(gym.Env):
         # Observation space is a vector of length number of factors
         self._get_states()
         self.observation_space = spaces.Box(
-                                    low=0, high=1, 
-                                    shape=(1,self.NUMBER_FACTORS), 
-                                            dtype=np.uint8)
-    
-    
-    
+            low=0, high=1,
+            shape=(1, self.NUMBER_FACTORS),
+            dtype=np.uint8)
+
     """
         Loads DAD file 
         self.received_treatments has all records who received the treatments specified.
-    """    
+    """
+
     def load_file(self):
         self.df = pd.read_csv(self.dadvec_file, sep=',', error_bad_lines=False, index_col=False, dtype='unicode')
         # Create a blank table with the column headers
@@ -52,7 +63,6 @@ class DadEnv(gym.Env):
                 self.received_treatments.append(_df, ignore_index=True)
         return self.received_treatments.shape
 
-
     def _get_actions(self):
         _actions = []
         _action = ''
@@ -64,8 +74,8 @@ class DadEnv(gym.Env):
         # This is need to remove the copy warning in adding new column
         pd.options.mode.chained_assignment = None  # default='warn'
         self.received_treatments['Action'] = _actions
-        self._actions = self.unique(_actions)
-        return(self._actions)
+        self._actions = unique(_actions)
+        return self._actions
 
     def get_random_action(self):
         return random.choice(self._actions)
@@ -76,19 +86,14 @@ class DadEnv(gym.Env):
 
     def get_random_state(self):
         return random.choice(self._states)
-    
-    # function to get unique values 
-    def unique(self, list1): 
-        # insert the list to the set 
-        list_set = set(list1) 
-        # convert the set to the list 
-        unique_list = (list(list_set)) 
-        return unique_list
+
+    # function to get unique values
 
     """
     STEP function
     TODO: Document
     """
+
     def step(self, action):
         self.done = True
         self.info = {"action": action}
@@ -98,7 +103,7 @@ class DadEnv(gym.Env):
         # self.received_treatments have received one or more treatments in an action
         self.candidates = pd.DataFrame(columns=self.df.columns)
 
-        for i in range( len(action) ):
+        for i in range(len(action)):
             if int(action[i]) == 1:
                 isempty = self.candidates.empty
                 # if empty add the first condition
@@ -125,9 +130,9 @@ class DadEnv(gym.Env):
             if not isempty:
                 self.reward = 10 - (int(_full_record['TLOS_CAT'].iloc[0]))
         self.full_record = self.candidates.sample(n=1)
-        self.observation = self.full_record.filter(DISEASES).to_numpy()     
+        self.observation = self.full_record.filter(DISEASES).to_numpy()
         return self.observation, self.reward, self.done, self.info
-  
+
     def reset(self):
         pass
 

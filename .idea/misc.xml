@@ -3,5 +3,5 @@
   <component name="JavaScriptSettings">
     <option name="languageLevel" value="ES6" />
   </component>
-  <component name="ProjectRootManager" version="2" project-jdk-name="Remote Python 3.7.4 (sftp://beapen@192.168.0.254:9998/home/beapen/scratch/dad-gym-env/.venv/bin/python)" project-jdk-type="Python SDK" />
+  <component name="ProjectRootManager" version="2" project-jdk-name="Remote Python 3.7.4 (sftp://beapen@192.168.0.254:7998/scratch/beapen/dad-gym-env/.venv/bin/python)" project-jdk-type="Python SDK" />
 </project>

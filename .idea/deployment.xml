@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" autoUpload="On explicit save action" serverName="minipc-beluga" autoUploadExternalChanges="true">
+    <serverData>
+      <paths name="minipc-beluga">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/scratch/beapen/dad-gym-env/" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+    <option name="myAutoUpload" value="ON_EXPLICIT_SAVE" />
+  </component>
+</project>
