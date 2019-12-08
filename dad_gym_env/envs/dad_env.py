@@ -137,7 +137,8 @@ class DadEnv(gym.Env):
         pass
 
     def render(self, mode='human'):
-        pass
+        print(f'Observtion: {self.observation}')
+        print(f'Reward: {self.reward}')
 
     def close(self):
         pass
