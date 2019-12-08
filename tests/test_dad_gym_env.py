@@ -15,7 +15,7 @@ import pytest
 @pytest.fixture
 def new_env():
     dad_env_ = dad_env.DadEnv(
-        "/home/beapen/projects/def-archer/beapen/dad-vec-sample.csv", 
+        "/home/beapen/projects/def-archer/beapen/dad-vector.csv", 
         treatments=['2NA', '2NM', '2NK', '2NF', '3OZ']
         )
     return dad_env_
@@ -43,6 +43,10 @@ def test_get_random_state(new_env):
 def test_get_states(new_env):
     assert new_env._get_states().any()
 
+def test_step(new_env):
+    print(new_env.step(new_env.get_random_action()))
+    print(new_env.step(new_env.get_random_action()))
+    print(new_env.step(new_env.get_random_action()))
 # def test_get_index():
 #     print('AGRP_F_D: ', headers.HEADERS.index('AGRP_F_D')) # 2 / 2103
 #     print('GENDER: ', headers.HEADERS.index('GENDER')) # 3 / 2103

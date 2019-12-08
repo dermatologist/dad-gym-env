@@ -16,9 +16,9 @@ class DadEnv(gym.Env):
     metadata = {'render.modes': ['human']}
     
     def __init__(self, dadvec_file, treatments=[]):
-        treatment_no = len(treatments)
         super(DadEnv, self).__init__()
-
+        treatment_no = len(treatments)
+        self.full_record = None
         self.dadvec_file = dadvec_file
         self.treatments = treatments
         (self._rows, self._cols) = self.load_file()
@@ -82,6 +82,10 @@ class DadEnv(gym.Env):
         unique_list = (list(list_set)) 
         return unique_list
 
+    """
+    STEP function
+    TODO: Document
+    """
     def step(self, action):
         self.done = True
         self.info = {"action": action}
@@ -90,8 +94,7 @@ class DadEnv(gym.Env):
         self.candidates = pd.DataFrame(columns=self.df.columns)
 
         for i in range( len(action) ):
-            print(action[i])
-            if i == '1':
+            if int(action[i]) == 1:
                 isempty = self.candidates.empty
                 # if empty add the first condition
                 if isempty:
@@ -102,12 +105,22 @@ class DadEnv(gym.Env):
                     self.candidates = self.candidates[self.candidates[self.treatments[i]] == '1']
         tlos = 0
         ct = 0
-        for candidate in self.candidates:
+        for index, candidate in self.candidates.iterrows():
             tlos = tlos + int(candidate['TLOS_CAT'])
             ct = ct + 1
         average_tlos = tlos / ct
         self.reward = int(10 - average_tlos)
-        self.observation = self.candidate.sample(n=1).filter(DISEASES).to_numpy()     
+
+        _action = ''
+        if self.full_record is not None:
+            for treatment in self.treatments:
+                _action = _action + self.full_record[treatment].iloc[0]
+            if action == _action:
+                self.reward = 10 - (int(self.full_record['TLOS_CAT'].iloc[0]))
+        # 'Unnamed: 0' is the index TODO: This has to be renamed
+        # print(self.candidates.sample(n=1)['Unnamed: 0'])
+        self.full_record = self.candidates.sample(n=1)
+        self.observation = self.candidates.sample(n=1).filter(DISEASES).to_numpy()     
         return self.observation, self.reward, self.done, self.info
   
     def reset(self):
