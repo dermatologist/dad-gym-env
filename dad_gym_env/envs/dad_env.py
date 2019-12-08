@@ -64,9 +64,15 @@ class DadEnv(gym.Env):
         self._actions = self.unique(_actions)
         return(self._actions)
 
+    def get_random_action(self):
+        return random.choice(self._actions)
+
     def _get_states(self):
         self._states = self.received_treatments.filter(DISEASES).to_numpy()
         return self._states
+
+    def get_random_state(self):
+        return random.choice(self._states)
     
     # function to get unique values 
     def unique(self, list1): 
@@ -101,7 +107,7 @@ class DadEnv(gym.Env):
             ct = ct + 1
         average_tlos = tlos / ct
         self.reward = int(10 - average_tlos)
-        self.observation = self.candidate.sample(n=1)     
+        self.observation = self.candidate.sample(n=1).filter(DISEASES).to_numpy()     
         return self.observation, self.reward, self.done, self.info
   
     def reset(self):
