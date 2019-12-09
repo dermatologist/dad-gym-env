@@ -26,32 +26,39 @@ class DadEnv(gym.Env):
     metadata = {'render.modes': ['human']}
 
     def __init__(self):
-        dadvec_file = "/home/beapen/projects/def-archer/beapen/dad-vec-sample.csv"
-        treatments = ['2NA', '2NM', '2NK', '2NF', '3OZ']
+        self.dadvec_file = "/home/beapen/projects/def-archer/beapen/dad-vector.csv"
+        self.treatments = ['2NA', '2NM', '2NK', '2NF', '3OZ']
         super(DadEnv, self).__init__()
-        treatment_no = len(treatments)
+        treatment_no = len(self.treatments)
         self.full_record = None
         self.df = None
         self.received_treatments = None
         self.observation = None
         self.reward = 5
-        self.dadvec_file = dadvec_file
-        self.treatments = treatments
-        (self._rows, self._cols) = self.load_file()
-        self.NUMBER_FACTORS = len(DISEASES)
-        self._get_actions()
-        self.action_space = spaces.Discrete(2 if len(self._actions) == 1 else len(self._actions))
-        # Observation space is a vector of length number of factors
-        self._get_states()
-        self.observation_space = spaces.Box(
-            low=0, high=1,
-            shape=(1, self.NUMBER_FACTORS),
-            dtype=np.uint8)
+
+
 
     """
         Loads DAD file 
         self.received_treatments has all records who received the treatments specified.
     """
+
+    # Getter must be defined first
+    @property
+    def dadvec_file(self):
+        return self._dadvec_file
+
+    @dadvec_file.setter
+    def dadvec_file(self, dadvec_file):
+        self._dadvec_file = dadvec_file
+
+    @property
+    def treatments(self):
+        return self._treatments
+
+    @treatments.setter
+    def treatments(self, treatments):
+        self._treatments = treatments
 
     def load_file(self):
         self.df = pd.read_csv(self.dadvec_file, sep=',', error_bad_lines=False, index_col=False, dtype='unicode')
@@ -138,7 +145,16 @@ class DadEnv(gym.Env):
         return self.observation, self.reward, self.done, self.info
 
     def reset(self):
-        pass
+        (self._rows, self._cols) = self.load_file()
+        self.NUMBER_FACTORS = len(DISEASES)
+        self._get_actions()
+        self.action_space = spaces.Discrete(2 if len(self._actions) == 1 else len(self._actions))
+        # Observation space is a vector of length number of factors
+        self._get_states()
+        self.observation_space = spaces.Box(
+            low=0, high=1,
+            shape=(1, self.NUMBER_FACTORS),
+            dtype=np.uint8)
 
     def render(self, mode='human'):
         print(f'Observtion: {self.observation}')

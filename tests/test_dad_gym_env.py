@@ -15,6 +15,8 @@ import gym
 @pytest.fixture
 def new_env():
     dad_env_ = dad_env.DadEnv()
+    dad_env_.dadvec_file = "/home/beapen/projects/def-archer/beapen/dad-vec-sample.csv"
+    dad_env_.reset()
     return dad_env_
 
 def test_version():
