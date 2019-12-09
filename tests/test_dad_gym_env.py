@@ -49,6 +49,8 @@ def test_step(new_env):
 
 def test_agent():
     env = gym.make('Dad-v0')
+    env.dadvec_file = "/home/beapen/projects/def-archer/beapen/dad-vector.csv"
+    env.treatments = ['2NA', '2NM', '2NK', '2NF', '3OZ']
     env.reset()
     for _ in range(10):
         env.render()

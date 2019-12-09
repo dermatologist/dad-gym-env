@@ -35,7 +35,7 @@ class DadEnv(gym.Env):
         self.received_treatments = None
         self.observation = None
         self.reward = 5
-
+        self.candidates = None
 
 
     """
@@ -132,9 +132,6 @@ class DadEnv(gym.Env):
         average_tlos = tlos / ct
         self.reward = int(10 - average_tlos)
 
-        print("Received: ", self.received_treatments.shape)
-        print("Candidates: ", self.candidates.shape)
-
         if self.full_record is not None:
             _full_record = self.full_record[self.full_record['Action'] == action]
             isempty = _full_record.empty
@@ -159,6 +156,10 @@ class DadEnv(gym.Env):
     def render(self, mode='human'):
         print(f'Observtion: {self.observation}')
         print(f'Reward: {self.reward}')
+        print("Received: ", self.received_treatments.shape)
+        if self.candidates is not None:
+            print("Candidates: ", self.candidates.shape)
+        print("-------------------------------------------")
 
     def close(self):
         pass
