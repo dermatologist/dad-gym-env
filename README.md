@@ -5,6 +5,23 @@ This is an experimental [OpenAI Gym](http://gym.openai.com/) environment for rei
 
 This is an experimental system for demo purposes only. This is not tested and is unlikely to have practical use because of various factors. This is part of our research on machine learning models in healthcare and demonstrates a novel approach based on DAD. Next step is to design an agent using [dopamine](https://github.com/google/dopamine).
 
+### How to use
+
+Dadage uses [poetry](https://poetry.eustace.io/) for dependency management.
+Use:
+
+```
+poetry install
+```
+
+There is a sample agent in tests: Provide the vectorized DAD file and list of CCI codes for interventions, and:
+
+```
+poetry run pytests tests -s
+```
+
+### Cite
+
 Please cite if you use this concept in your research.  Here
 is an example BibTeX entry:
 
