@@ -5,6 +5,11 @@ This is an experimental [OpenAI Gym](http://gym.openai.com/) environment for rei
 
 This is an experimental system for demo purposes only. This is not tested and is unlikely to have practical use because of various factors. This is part of our research on machine learning models in healthcare and demonstrates a novel approach based on DAD. Next step is to design an agent using [dopamine](https://github.com/google/dopamine).
 
+### Work in progress
+
+* Improve reward based on nearest neighbour (Currently returns mean when the exact matching state is not found).
+* This is an experiment with RL from non-sequential patient outcome databases such as DAD. Please let us know your [feedback](https://canehealth.com/contact/).
+
 ### How to use
 
 Dadage uses [poetry](https://poetry.eustace.io/) for dependency management.
