@@ -10,12 +10,12 @@ import gym
         2NF - Inspection stomach
         3OZ - Imaging intervention 
 
-        "/home/beapen/project/beapen/dad-vec-sample.csv",
+        "/path/to/dad-vec-sample.csv",
 """
 @pytest.fixture
 def new_env():
     dad_env_ = dad_env.DadEnv()
-    dad_env_.dadvec_file = "/home/beapen/projects/def-archer/beapen/dad-vec-sample.csv"
+    dad_env_.dadvec_file = "/path/to/dad-vec-sample.csv"
     dad_env_.reset()
     return dad_env_
 
@@ -49,7 +49,7 @@ def test_step(new_env):
 
 def test_agent():
     env = gym.make('Dad-v0')
-    env.dadvec_file = "/home/beapen/projects/def-archer/beapen/dad-vector.csv"
+    env.dadvec_file = "/path/to/dad-vector.csv"
     env.treatments = ['2NA', '2NM', '2NK', '2NF', '3OZ']
     env.reset()
     for _ in range(10):

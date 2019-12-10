@@ -26,7 +26,7 @@ class DadEnv(gym.Env):
     metadata = {'render.modes': ['human']}
 
     def __init__(self):
-        self.dadvec_file = "/home/beapen/projects/def-archer/beapen/dad-vector.csv"
+        self.dadvec_file = "/path/to/dad-vector.csv"
         self.treatments = ['2NA', '2NM', '2NK', '2NF', '3OZ']
         super(DadEnv, self).__init__()
         treatment_no = len(self.treatments)
