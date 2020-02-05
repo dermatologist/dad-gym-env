@@ -141,6 +141,9 @@ class DadEnv(gym.Env):
         self.observation = self.full_record.filter(DISEASES).to_numpy()
         return self.observation, self.reward, self.done, self.info
 
+    """should return an observation
+
+    """
     def reset(self):
         (self._rows, self._cols) = self.load_file()
         self.NUMBER_FACTORS = len(DISEASES)
@@ -152,6 +155,12 @@ class DadEnv(gym.Env):
             low=0, high=1,
             shape=(1, self.NUMBER_FACTORS),
             dtype=np.uint8)
+        # Create a blank table with the column headers
+        # Candidates have received all treatments in an action
+        # self.received_treatments have received one or more treatments in an action
+        self.full_record = self.received_treatments.sample(n=1)
+        self.observation = self.full_record.filter(DISEASES).to_numpy()
+        return self.observation
 
     def render(self, mode='human'):
         print(f'Observtion: {self.observation}')

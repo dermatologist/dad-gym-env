@@ -19,8 +19,10 @@ except:
 
 
 ENV_NAME = 'Dad-v0'
+#ENV_NAME = 'CartPole-v0'
+
 # Get the environment and extract the number of actions.
-env = gym.make('Dad-v0')
+env = gym.make(ENV_NAME)
 env.dadvec_file = os.getcwd() + "/dad-vector.csv"
 env.treatments = ['2NA', '2NM', '2NK', '2NF', '3OZ']
 env.reset()
@@ -44,13 +46,13 @@ print(model.summary())
 
 # SARSA does not require a memory.
 policy = BoltzmannQPolicy()
-sarsa = SARSAAgent(model=model, nb_actions=nb_actions, nb_steps_warmup=10, policy=policy)
+sarsa = SARSAAgent(model=model, nb_actions=nb_actions, nb_steps_warmup=0, policy=policy)
 sarsa.compile(Adam(lr=1e-3), metrics=['mae'])
 
 # Okay, now it's time to learn something! We visualize the training here for show, but this
 # slows down training quite a lot. You can always safely abort the training prematurely using
 # Ctrl + C.
-sarsa.fit(env, nb_steps=50000, visualize=False, verbose=2)
+sarsa.fit(env, nb_steps=10, visualize=False, verbose=2)
 
 # After training is done, we save the final weights.
 sarsa.save_weights('sarsa_{}_weights.h5f'.format(ENV_NAME), overwrite=True)
