@@ -2,6 +2,7 @@ from dad_gym_env import __version__
 from dad_gym_env.envs import dad_env, headers
 import pytest
 import gym
+import os
 """
         http://www.health.gov.on.ca/en/pro/programs/ecfa/docs/qbp_gi.pdf
         2NM - Inspection large intestine
@@ -14,8 +15,14 @@ import gym
 """
 @pytest.fixture
 def new_env():
+    try:
+        os.chdir(os.path.join(os.getcwd(), 'data'))
+        print(os.getcwd())
+    except:
+        pass
+
     dad_env_ = dad_env.DadEnv()
-    dad_env_.dadvec_file = "/path/to/dad-vec-sample.csv"
+    dad_env_.dadvec_file = os.getcwd() + "/dad-vec-sample.csv"
     dad_env_.reset()
     return dad_env_
 
@@ -49,7 +56,12 @@ def test_step(new_env):
 
 def test_agent():
     env = gym.make('Dad-v0')
-    env.dadvec_file = "/path/to/dad-vector.csv"
+    try:
+        os.chdir(os.path.join(os.getcwd(), 'data'))
+        print(os.getcwd())
+    except:
+        pass
+    env.dadvec_file = os.getcwd() + "/dad-vector.csv"
     env.treatments = ['2NA', '2NM', '2NK', '2NF', '3OZ']
     env.reset()
     for _ in range(10):

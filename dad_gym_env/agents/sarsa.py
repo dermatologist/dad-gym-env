@@ -17,9 +17,11 @@ try:
 except:
     pass
 
+
+ENV_NAME = 'Dad-v0'
 # Get the environment and extract the number of actions.
 env = gym.make('Dad-v0')
-env.dadvec_file = "../data/dad-vector.csv"
+env.dadvec_file = os.getcwd() + "/dad-vector.csv"
 env.treatments = ['2NA', '2NM', '2NK', '2NF', '3OZ']
 env.reset()
 
