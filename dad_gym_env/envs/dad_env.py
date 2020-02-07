@@ -13,6 +13,8 @@ from gym import error, spaces, utils
 from gym.utils import seeding
 from .headers import DISEASES
 
+# Other
+from sklearn.preprocessing import LabelEncoder
 
 def unique(list1):
     # insert the list to the set
@@ -45,6 +47,10 @@ class DadEnv(gym.Env):
 
     # Getter must be defined first
     @property
+    def actions(self):
+        return self._actions
+
+    @property
     def dadvec_file(self):
         return self._dadvec_file
 
@@ -62,6 +68,16 @@ class DadEnv(gym.Env):
 
     def load_file(self):
         self.df = pd.read_csv(self.dadvec_file, sep=',', error_bad_lines=False, index_col=False, dtype='unicode')
+        # Drop columns
+        drop_col = ['SERIAL_NO', 'AGRP_F_D', 'GENDER', 'WGHT_GRP', 'X_FR_I_T', 'X_TO_I_T', 'SUB_PROV', 'ACT_LCAT', 'ALC_LCAT', 'ADM_CAT', 'ENT_CODE']
+        self.df = self.df.drop(columns=drop_col)
+        # Change Age and gender
+        # non_numeric_columns = ['AGRP_F_D', 'GENDER']
+        # le = LabelEncoder()
+        # for col in non_numeric_columns:
+        #     self.df[col] = le.fit_transform(self.df[col])
+        # Remove all 0 clumns
+        # self.df = self.df.loc[:, (self.df != '0').any(axis=0)]
         # Create a blank table with the column headers
         self.received_treatments = pd.DataFrame(columns=self.df.columns)
         # print(self.df.shape) # (100, 2103)
@@ -105,7 +121,13 @@ class DadEnv(gym.Env):
     TODO: Document
     """
 
-    def step(self, action):
+    def step(self, _action):
+        action_isstr = isinstance(_action, str)
+        if action_isstr:
+            action = _action            
+        else:
+            action = self._actions[_action.item()]
+
         self.done = True
         self.info = {"action": action}
 
@@ -114,6 +136,7 @@ class DadEnv(gym.Env):
         # self.received_treatments have received one or more treatments in an action
         self.candidates = pd.DataFrame(columns=self.df.columns)
 
+        print(action)
         for i in range(len(action)):
             if int(action[i]) == 1:
                 isempty = self.candidates.empty
@@ -141,6 +164,9 @@ class DadEnv(gym.Env):
         self.observation = self.full_record.filter(DISEASES).to_numpy()
         return self.observation, self.reward, self.done, self.info
 
+    """should return an observation
+
+    """
     def reset(self):
         (self._rows, self._cols) = self.load_file()
         self.NUMBER_FACTORS = len(DISEASES)
@@ -152,6 +178,12 @@ class DadEnv(gym.Env):
             low=0, high=1,
             shape=(1, self.NUMBER_FACTORS),
             dtype=np.uint8)
+        # Create a blank table with the column headers
+        # Candidates have received all treatments in an action
+        # self.received_treatments have received one or more treatments in an action
+        self.full_record = self.received_treatments.sample(n=1)
+        self.observation = self.full_record.filter(DISEASES).to_numpy()
+        return self.observation
 
     def render(self, mode='human'):
         print(f'Observtion: {self.observation}')
