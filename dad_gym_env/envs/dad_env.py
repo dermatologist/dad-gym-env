@@ -47,6 +47,10 @@ class DadEnv(gym.Env):
 
     # Getter must be defined first
     @property
+    def actions(self):
+        return self._actions
+
+    @property
     def dadvec_file(self):
         return self._dadvec_file
 
@@ -117,7 +121,13 @@ class DadEnv(gym.Env):
     TODO: Document
     """
 
-    def step(self, action):
+    def step(self, _action):
+        action_isstr = isinstance(_action, str)
+        if action_isstr:
+            action = _action            
+        else:
+            action = self._actions[_action.item()]
+
         self.done = True
         self.info = {"action": action}
 
@@ -126,6 +136,7 @@ class DadEnv(gym.Env):
         # self.received_treatments have received one or more treatments in an action
         self.candidates = pd.DataFrame(columns=self.df.columns)
 
+        print(action)
         for i in range(len(action)):
             if int(action[i]) == 1:
                 isempty = self.candidates.empty
