@@ -242,6 +242,14 @@ version = "1.3.2"
 future = "*"
 
 [[package]]
+category = "main"
+description = "A Python SOCKS client module. See https://github.com/Anorov/PySocks for more information."
+name = "pysocks"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+version = "1.7.1"
+
+[[package]]
 category = "dev"
 description = "pytest: simple powerful testing with Python"
 name = "pytest"
@@ -322,7 +330,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["pathlib2", "contextlib2", "unittest2"]
 
 [metadata]
-content-hash = "d5f3bf6db8f5ca78e3fe66e0ae1cbee0d3cab41be0c9c61de5cda9393413709a"
+content-hash = "58bb85e6d7bc8ea88deecb2986980448eed8ffe8cc33ecb8e6a1740b637f9603"
 python-versions = "^3.7"
 
 [metadata.files]
@@ -486,6 +494,11 @@ py = [
 pyglet = [
     {file = "pyglet-1.3.2-py2.py3-none-any.whl", hash = "sha256:8b07aea16f34ac861cffd06a0c17723ca944d172e577b57b21859b7990709a66"},
     {file = "pyglet-1.3.2.tar.gz", hash = "sha256:b00570e7cdf6971af8953b6ece50d83d13272afa5d1f1197c58c0f478dd17743"},
+]
+pysocks = [
+    {file = "PySocks-1.7.1-py27-none-any.whl", hash = "sha256:08e69f092cc6dbe92a0fdd16eeb9b9ffbc13cadfe5ca4c7bd92ffb078b293299"},
+    {file = "PySocks-1.7.1-py3-none-any.whl", hash = "sha256:2725bd0a9925919b9b51739eea5f9e2bae91e83288108a9ad338b2e3a4435ee5"},
+    {file = "PySocks-1.7.1.tar.gz", hash = "sha256:3f8804571ebe159c380ac6de37643bb4685970655d3bba243530d6558b799aa0"},
 ]
 pytest = [
     {file = "pytest-3.10.1-py2.py3-none-any.whl", hash = "sha256:3f193df1cfe1d1609d4c583838bea3d532b18d6160fd3f55c9447fdca30848ec"},

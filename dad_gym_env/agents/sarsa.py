@@ -46,7 +46,7 @@ print(model.summary())
 
 # SARSA does not require a memory.
 policy = BoltzmannQPolicy()
-sarsa = SARSAAgent(model=model, nb_actions=nb_actions, nb_steps_warmup=0, policy=policy)
+sarsa = SARSAAgent(model=model, nb_actions=nb_actions, nb_steps_warmup=3, policy=policy)
 sarsa.compile(Adam(lr=1e-3), metrics=['mae'])
 
 # Okay, now it's time to learn something! We visualize the training here for show, but this

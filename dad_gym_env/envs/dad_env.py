@@ -13,6 +13,8 @@ from gym import error, spaces, utils
 from gym.utils import seeding
 from .headers import DISEASES
 
+# Other
+from sklearn.preprocessing import LabelEncoder
 
 def unique(list1):
     # insert the list to the set
@@ -62,6 +64,16 @@ class DadEnv(gym.Env):
 
     def load_file(self):
         self.df = pd.read_csv(self.dadvec_file, sep=',', error_bad_lines=False, index_col=False, dtype='unicode')
+        # Drop columns
+        drop_col = ['SERIAL_NO', 'AGRP_F_D', 'GENDER', 'WGHT_GRP', 'X_FR_I_T', 'X_TO_I_T', 'SUB_PROV', 'ACT_LCAT', 'ALC_LCAT', 'ADM_CAT', 'ENT_CODE']
+        self.df = self.df.drop(columns=drop_col)
+        # Change Age and gender
+        # non_numeric_columns = ['AGRP_F_D', 'GENDER']
+        # le = LabelEncoder()
+        # for col in non_numeric_columns:
+        #     self.df[col] = le.fit_transform(self.df[col])
+        # Remove all 0 clumns
+        # self.df = self.df.loc[:, (self.df != '0').any(axis=0)]
         # Create a blank table with the column headers
         self.received_treatments = pd.DataFrame(columns=self.df.columns)
         # print(self.df.shape) # (100, 2103)
