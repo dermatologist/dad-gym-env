@@ -1,4 +1,4 @@
-# DAD-GYM-ENV (Dadage)
+# DAD-GYM-ENV (Dadge - pronounced dadaji)
 ## Reinforcement Learning env based on Discharge Abstract Database
 
 This is an experimental [OpenAI Gym](http://gym.openai.com/) environment for reinforcement learning based on Discharge Abstract Database. Reinforcement learning (RL) is an area of machine learning concerned with how software agents ought to take actions in an environment in order to maximize some notion of cumulative reward. For a list of interventions, Dadage gives a random patient state (demographics + comorbidities) and an action space of known combinations of interventions. The reward is (10 - Total Length of Stay class). This requires a one-hot encoded version of DAD. The code for creating this is [here:](https://github.com/dermatologist/hephaestus/blob/develop/src/hephaestus/utils/dad-vector.py). Please note that this repository does not contain any primary/derived data from discharge abstract database. The approach may be extendable to other similar databases.
